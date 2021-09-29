@@ -1,0 +1,21 @@
+static scope: go through static links until you get to the
+    place where something was defined, compiler knows how far to go
+
+dynamic scope: follow the dynamic link but the compiler doesn't know how many times
+
+static scope won for some reason
+this is why:
+
+val pi = 3.1415
+def areaofcircle(r):
+    return pi*r*r // this pi is 3.1415
+
+def crust(pi):
+    return pi*areaofcircle(5)
+
+calling crust(100) should return (and it does with static scope):
+    100 * 3.1415 * r*r
+with dynamic scope, it returns:
+    100 * 100 * r * r
+
+this could be avoided by just using a better name, but its not a problem with static scope
