@@ -1,0 +1,38 @@
+problem 1: CFG
+rules: more x's than o's, all o's are continuous
+
+S = XO ?? OX
+XO = - | x? XO o
+OX = - | o OX x
+
+-----------------
+problem 2: regexp
+rules: n's o's p's, can't say "oop"
+
+leave out the n's:
+(o?p)*o*
+
+normal:
+(n(o?p)*o*)*
+
+-----------------
+problem 3: groupOrs
+function that takes a boolean expression and returns any consecutive ors in a list
+
+def groupOrs(expr: BoolExp): BoolExp = expr match
+    case True => True
+    case False => False
+    case Not(e) => Not(groupOrs(e))
+    case And(e1, e2) => And(groupOrs(e1), groupOrs(e2))
+    case Or(e1, e2) => //this is the only interesting one
+        combineOrs(expr, List.empty) //do either this line or the next (:: vs. :::)
+        Ors(flattenOrs(expr)) //this one uses :::
+    case Ors => ??? //this case won't happen because we havent put the ors into an Ors yet
+
+def combineOrs(expr: BoolExp, accum: List[BoolExp]): List[BoolExp] = expr match
+    case Or(e1, e2) => combineOrs(e1, combineOrs(e2, accum))
+    case _ => groupOrs(expr) :: accum
+
+def flattenOrs(expr: BoolExp): List[BoolExp] = expr match
+    case Or(e1, e2) => flattenOrs(e1) ::: flattenOrs(e2)
+    case _ => List(groupOrs(expr))
