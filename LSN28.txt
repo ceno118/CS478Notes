@@ -1,0 +1,46 @@
+object oriented programming
+
+3 main things:
+    inheritance - reusing code
+    dynamic polymorphism
+    subtyping (is-a relationship)
+        classes can have subtypes: cat is a subtype of mammal is a subtype of animal
+
+iterators
+    if you want to do x number of things to x number of data structures, you would normally need
+    x^2. an iterator is an object whose sole purpose is to iterate. you convert each data structure
+    into an iterator (using .iterator) and feed them to the thing your trying to do as long as it
+    can take an iterator
+
+    the index for an array is an int which caps out at around 2 billion. thats not actually that
+    big so we use iterators bc they can be bigger apparently
+
+    a trait is just an abstract class so you dont have to implement the methods
+        this is helpful because we would want to use them for different data structures
+        if they're called ListIter, ArrayIter, etc., each one IS An (subtyping) iterator
+
+    trait Iterator[A]: 
+        def hasNext: Boolean
+        def next(): A
+
+    var sum = 0
+    while iter.hasNext do
+        sum += iter.next()
+
+    dynamic polymorphism with iterators (you don't know exactly what its going to do until runtime)
+        you can have different code run depending on the kind of iterator you send it
+
+    // extends means that it takes some code from Iterator and that its a subtype of Iterator
+    // next doesnt actually mean next it basically means current
+    class ListIter[A](list: List[A]) extends Iterator[A]: 
+        var cur = list // youre probable going to need something like this all the time
+        def hasNext: Boolean = cur.nonEmpty
+        def next(): A = 
+            val x = cur.head
+            cur = cur.tail
+            x
+
+    class foreverIter[A](a: A) extends Iterator[A]: // this one doesnt need the var
+    // it just gives you the same value forever which apparently has uses sometimes
+        def hasNext = true
+        def next() = a
